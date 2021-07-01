@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="demo"></div>
+
+    <script type="module">
+      import { html, render } from 'lit-html';
+      import '../dist/deviner-nombre.js';
+      render(
+        html`
+          <deviner-nombre max="10" nombreDeVie="3"> some more light-dom </deviner-nombre>
+        `,
+        document.querySelector('#demo')
+      );
+    </script>
+  </body>
+</html>
