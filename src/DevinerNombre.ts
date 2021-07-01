@@ -6,6 +6,9 @@ export class DevinerNombre extends LitElement {
       display: block;
       padding: 25px;
     }
+    button {
+      width: 19%;
+    }
   `;
 
   @property({ type: Number }) max = 0;
@@ -15,6 +18,8 @@ export class DevinerNombre extends LitElement {
   private randomNumber: Number = Math.floor(Math.random() * 11);
 
   private helpLabel: string = '';
+
+  private partyEnd: boolean = false;
 
   get playerInput() {
     return this.shadowRoot!.getElementById('playerInput')! as HTMLInputElement;
@@ -26,41 +31,50 @@ export class DevinerNombre extends LitElement {
 
   checkNumber() {
     console.log(this.randomNumber);
-    if (this.nombreDeVie === 0) {
-      this.helpLabel = `Tu n'as plus aucun éssaie le chiffre était ${this.randomNumber}`;
-    }
-
-    if (
-      this.playerValue <= 10 &&
-      this.playerValue >= 0 &&
-      this.nombreDeVie > 0
-    ) {
-      if (this.playerValue === this.randomNumber) {
-        this.helpLabel = `Bien joué tu as trouvé le bon chiffre ( ${this.randomNumber} )`;
-      } else {
-        if (this.playerValue > this.randomNumber) {
-          this.helpLabel = `Le chiffre est plus petit que ${this.playerValue}`;
+    if (!this.partyEnd) {
+      this.helpLabel = `Le Chiffre doit être compris entre 0 et 10`;
+      if (this.playerValue <= 10 && this.playerValue >= 0) {
+        if (this.nombreDeVie >= 1) {
+          if (this.playerValue === this.randomNumber) {
+            this.helpLabel = `Trouvé ! le nombre à trouver était bien ( ${this.randomNumber} )`;
+            this.partyEnd = true;
+          } else {
+            if (this.playerValue > this.randomNumber) {
+              this.helpLabel = ` ${this.playerValue} est trop grand !`;
+            }
+            if (this.playerValue < this.randomNumber) {
+              this.helpLabel = `${this.playerValue} est trop petit !`;
+            }
+          }
+          this.nombreDeVie -= 1;
         }
-        if (this.playerValue < this.randomNumber) {
-          this.helpLabel = `Le chiffre est plus grand que ${this.playerValue}`;
+        if (this.nombreDeVie === 0) {
+          this.helpLabel = `Tu n'as plus aucun éssaie le nombre était ${this.randomNumber}`;
+          this.partyEnd = true;
         }
       }
-      this.nombreDeVie -= 1;
     }
+  }
 
-    if (this.playerValue > 10 || this.playerValue < 0) {
-      this.helpLabel = 'Le chiffre est compris entre 0 et 10';
-      console.log(this.playerValue > 10 || this.playerValue < 0);
-    }
+  replay() {
+    this.helpLabel = '';
+    this.partyEnd = false;
+    this.nombreDeVie = 3;
+    this.randomNumber = Math.floor(Math.random() * 11);
   }
 
   render() {
     return html`
-      <h1>Entrez un nombre entre 0 et 10</h1>
-      <h2>Nombre de vie ${this.nombreDeVie}</h2>
-      <input id="playerInput" />
-      <button @click=${this.checkNumber} type="submit">ok</button>
+      <h2>Entrez un nombre entre 0 et 10</h2>
+      <h4>Nombre de vie ${this.nombreDeVie}</h4>
+      ${this.partyEnd
+        ? html``
+        : html`<input id="playerInput" />
+            <button @click=${this.checkNumber} type="submit">Ok</button>`}
       <h5>${this.helpLabel}</h5>
+      ${this.partyEnd
+        ? html`<button @click=${this.replay} type="submit">Rejouer</button>`
+        : html``}
     `;
   }
 }
