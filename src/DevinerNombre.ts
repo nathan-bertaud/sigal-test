@@ -94,6 +94,12 @@ export class DevinerNombre extends LitElement {
     this.randomNumber = Math.floor(Math.random() * 11);
   }
 
+  onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter') {
+      this.checkNumber();
+    }
+  }
+
   render() {
     return html`
       <h2>Entrez un nombre entre 0 et 10</h2>
@@ -112,15 +118,16 @@ export class DevinerNombre extends LitElement {
         ? html``
         : html`<div class="container">
             <input
-              placeholder="Tentative n°${this.tentative}"
+              placeholder="Tentative n°${this.tentative} "
               id="playerInput"
+              @keydown=${this.onKeyDown}
             />
             <button
               @click=${this.checkNumber}
               type="submit"
               style="margin-left: 6%"
             >
-              Ok
+              Ok ou entrer
             </button>
           </div>`}
       <h5>${this.helpLabel}</h5>
