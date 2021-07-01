@@ -6,8 +6,35 @@ export class DevinerNombre extends LitElement {
       display: block;
       padding: 25px;
     }
+
     button {
-      width: 19%;
+      width: 35%;
+      height: 42px;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      cursor: pointer;
+      text-decoration-style: wavy;
+    }
+
+    input {
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input:hover {
+      background-color: #45a04;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
   `;
 
@@ -70,11 +97,21 @@ export class DevinerNombre extends LitElement {
   render() {
     return html`
       <h2>Entrez un nombre entre 0 et 10</h2>
-      <h4>Nombre de vie ${this.nombreDeVie}</h4>
+      <h4>
+        Nombre de vie
+        ${this.nombreDeVie
+          ? html`<span
+              style="color: forestgreen; font-size: 25px; margin-left:10px"
+              >${this.nombreDeVie}</span
+            >`
+          : html`<span style="color: darkred; font-size: 25px; margin-left:10px"
+              >${this.nombreDeVie}</span
+            >`}
+      </h4>
       ${this.partyEnd
         ? html``
-        : html`<input
-              class="form-control"
+        : html`<div class="container">
+            <input
               placeholder="Tentative n°${this.tentative}"
               id="playerInput"
             />
@@ -84,7 +121,8 @@ export class DevinerNombre extends LitElement {
               style="margin-left: 6%"
             >
               Ok
-            </button>`}
+            </button>
+          </div>`}
       <h5>${this.helpLabel}</h5>
       ${this.partyEnd
         ? html`<button @click=${this.replay} type="submit">Rejouer</button>`
