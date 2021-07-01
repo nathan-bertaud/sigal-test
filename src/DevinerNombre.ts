@@ -25,6 +25,10 @@ export class DevinerNombre extends LitElement {
     return this.shadowRoot!.getElementById('playerInput')! as HTMLInputElement;
   }
 
+  get tentative() {
+    return 4 - this.nombreDeVie;
+  }
+
   get playerValue() {
     return parseFloat(this.playerInput.value);
   }
@@ -32,7 +36,6 @@ export class DevinerNombre extends LitElement {
   checkNumber() {
     console.log(this.randomNumber);
     if (!this.partyEnd) {
-      this.helpLabel = `Le Chiffre doit être compris entre 0 et 10`;
       if (this.playerValue <= 10 && this.playerValue >= 0) {
         if (this.nombreDeVie >= 1) {
           if (this.playerValue === this.randomNumber) {
@@ -47,6 +50,7 @@ export class DevinerNombre extends LitElement {
             }
           }
           this.nombreDeVie -= 1;
+          this.playerInput.value = '';
         }
         if (this.nombreDeVie === 0) {
           this.helpLabel = `Tu n'as plus aucun éssaie le nombre était ${this.randomNumber}`;
@@ -69,8 +73,18 @@ export class DevinerNombre extends LitElement {
       <h4>Nombre de vie ${this.nombreDeVie}</h4>
       ${this.partyEnd
         ? html``
-        : html`<input id="playerInput" />
-            <button @click=${this.checkNumber} type="submit">Ok</button>`}
+        : html`<input
+              class="form-control"
+              placeholder="Tentative n°${this.tentative}"
+              id="playerInput"
+            />
+            <button
+              @click=${this.checkNumber}
+              type="submit"
+              style="margin-left: 6%"
+            >
+              Ok
+            </button>`}
       <h5>${this.helpLabel}</h5>
       ${this.partyEnd
         ? html`<button @click=${this.replay} type="submit">Rejouer</button>`
