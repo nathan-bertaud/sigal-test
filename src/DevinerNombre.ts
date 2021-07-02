@@ -11,11 +11,19 @@ export class DevinerNombre extends LitElement {
       width: 35%;
       height: 42px;
       margin-top: 8px;
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
     }
 
     button:hover {
       cursor: pointer;
-      text-decoration-style: wavy;
+      transition: background-color 0.5s ease;
+      background-color: #39893c;
     }
 
     input {
@@ -79,7 +87,7 @@ export class DevinerNombre extends LitElement {
           this.nombreDeVie -= 1;
           this.playerInput.value = '';
         }
-        if (this.nombreDeVie === 0) {
+        if (this.nombreDeVie === 0 && !this.partyEnd) {
           this.helpLabel = `Tu n'as plus aucun éssaie le nombre était ${this.randomNumber}`;
           this.partyEnd = true;
         }
@@ -106,8 +114,7 @@ export class DevinerNombre extends LitElement {
       <h4>
         Nombre de vie
         ${this.nombreDeVie
-          ? html`<span
-              style="color: forestgreen; font-size: 25px; margin-left:10px"
+          ? html`<span style="color: #4CAF50; font-size: 25px; margin-left:10px"
               >${this.nombreDeVie}</span
             >`
           : html`<span style="color: darkred; font-size: 25px; margin-left:10px"
@@ -127,7 +134,7 @@ export class DevinerNombre extends LitElement {
               type="submit"
               style="margin-left: 6%"
             >
-              Ok ou entrer
+              Ok
             </button>
           </div>`}
       <h5>${this.helpLabel}</h5>
