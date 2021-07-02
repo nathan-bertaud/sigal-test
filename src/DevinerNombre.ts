@@ -9,8 +9,8 @@ export class DevinerNombre extends LitElement {
 
     button {
       width: 35%;
-      height: 42px;
-      margin-top: 8px;
+      height: 40px;
+      margin-top: 9px;
       background-color: #4caf50;
       border: none;
       color: white;
@@ -18,6 +18,8 @@ export class DevinerNombre extends LitElement {
       text-decoration: none;
       display: inline-block;
       font-size: 16px;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
 
     button:hover {
@@ -69,7 +71,6 @@ export class DevinerNombre extends LitElement {
   }
 
   checkNumber() {
-    console.log(this.randomNumber);
     if (!this.partyEnd) {
       if (this.playerValue <= 10 && this.playerValue >= 0) {
         if (this.nombreDeVie >= 1) {
