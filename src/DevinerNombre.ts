@@ -52,7 +52,11 @@ export class DevinerNombre extends LitElement {
 
   @property({ type: Number }) nombreDeVie = 0;
 
-  private randomNumber: Number = Math.floor(Math.random() * 11);
+  private isInit: boolean = false;
+
+  private randomNumber: number = 0;
+
+  private lifecountTampon: number = 0;
 
   private helpLabel: string = '';
 
@@ -62,17 +66,13 @@ export class DevinerNombre extends LitElement {
     return this.shadowRoot!.getElementById('playerInput')! as HTMLInputElement;
   }
 
-  get tentative() {
-    return 4 - this.nombreDeVie;
-  }
-
   get playerValue() {
     return parseFloat(this.playerInput.value);
   }
 
   checkNumber() {
     if (!this.partyEnd) {
-      if (this.playerValue <= 10 && this.playerValue >= 0) {
+      if (this.playerValue <= this.max && this.playerValue >= 0) {
         if (this.nombreDeVie >= 1) {
           if (this.playerValue === this.randomNumber) {
             this.helpLabel = `Trouvé ! le nombre à trouver était bien ( ${this.randomNumber} )`;
@@ -99,8 +99,16 @@ export class DevinerNombre extends LitElement {
   replay() {
     this.helpLabel = '';
     this.partyEnd = false;
-    this.nombreDeVie = 3;
-    this.randomNumber = Math.floor(Math.random() * 11);
+    this.nombreDeVie = this.lifecountTampon;
+    this.randomNumber = Math.floor(Math.random() * (this.max + 1));
+  }
+
+  initialization() {
+    if (!this.isInit) {
+      this.lifecountTampon = this.nombreDeVie;
+      this.randomNumber = Math.floor(Math.random() * (this.max + 1));
+    }
+    this.isInit = true;
   }
 
   onKeyDown(e: KeyboardEvent) {
@@ -110,8 +118,10 @@ export class DevinerNombre extends LitElement {
   }
 
   render() {
+    this.initialization();
+    console.log(this.randomNumber);
     return html`
-      <h2>Entrez un nombre entre 0 et 10</h2>
+      <h2>Entrez un nombre entre 0 et ${this.max}</h2>
       <h4>
         Nombre de vie
         ${this.nombreDeVie
@@ -126,7 +136,7 @@ export class DevinerNombre extends LitElement {
         ? html``
         : html`<div class="container">
             <input
-              placeholder="Tentative n°${this.tentative} "
+              placeholder="Enter "
               id="playerInput"
               @keydown=${this.onKeyDown}
             />
